@@ -13,3 +13,4 @@ test('renders learn react link', () => {
 
   expect(getByText(/News/i)).toBeInTheDocument();
 });
+

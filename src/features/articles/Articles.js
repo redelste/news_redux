@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import styles from './Articles.module.css'
 import {
   selectArticles,
   fetchArticles,
   selectCurrentPage,
-  setPage
+  setPage,
+  selectTotalResults,
+  PAGE_SIZE
 } from './articlesSlice';
 import Button from '@material-ui/core/Button';
 import { TextField, Card } from '@material-ui/core';
@@ -12,8 +15,10 @@ import { TextField, Card } from '@material-ui/core';
 export function Articles() {
   const articles = useSelector(selectArticles);
   const page = useSelector(selectCurrentPage);
+  const totalResults = useSelector(selectTotalResults)
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
+
 
   return (
     <div>
@@ -33,11 +38,11 @@ export function Articles() {
       {articles.length > 0 ? (
         <div>
           <p>Page: <strong>{page}</strong></p>
-          <Button variant="contained" color="primary" disabled={page === 1 || !searchQuery} onClick={() => {
+          <Button m={3} variant="contained" color="primary" disabled={page === 1 || !searchQuery} onClick={() => {
             dispatch(setPage(Math.max(1, page - 1)));
             dispatch(fetchArticles(searchQuery, page));
           }}>Previous</Button>
-          <Button  variant="contained" color="primary" disabled={!searchQuery}onClick={() => {
+          <Button m={3} variant="contained" color="primary" disabled={page ===  Math.ceil(totalResults/PAGE_SIZE)||!searchQuery}onClick={() => {
             if(searchQuery){
             dispatch(setPage(page + 1))
             dispatch(fetchArticles(searchQuery, page))

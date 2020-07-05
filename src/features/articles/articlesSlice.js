@@ -2,13 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const NEWSAPI_BASE_URL = process.env.REACT_APP_NEWSAPI_BASE_URL;
 const NEWSAPI_API_KEY = process.env.REACT_APP_NEWSAPI_API_KEY;
-const PAGE_SIZE = 10;
+export const PAGE_SIZE = 10;
 
 export const newsSlice = createSlice({
   name: 'news',
   initialState: {
     articles: [],
-    page: 1
+    page: 1,
+    totalResults: 0
   },
   reducers: {
     setArticles: (state, action) => {
@@ -16,11 +17,14 @@ export const newsSlice = createSlice({
     },
     setPage: (state, action) => {
       state.page = action.payload
+    },    
+    setTotalResults: (state, action) => {
+      state.totalResults = action.payload
     }
   },
 });
 
-export const { setArticles, setPage } = newsSlice.actions;
+export const { setArticles, setPage, setTotalResults } = newsSlice.actions;
 
 export const fetchArticles = (searchQuery, page) => dispatch => {
   const url = `${NEWSAPI_BASE_URL}?${new URLSearchParams({q: searchQuery, pageSize: PAGE_SIZE, page})}`
@@ -32,6 +36,7 @@ export const fetchArticles = (searchQuery, page) => dispatch => {
   }).then(res => res.json()).then(data => {
     console.log(data)
     dispatch(setArticles(data.articles))
+    dispatch(setTotalResults(data.totalResults))
   })
 }
 
@@ -40,5 +45,5 @@ export const fetchArticles = (searchQuery, page) => dispatch => {
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectArticles = state => state.news.articles;
 export const selectCurrentPage = state => state.news.page;
-
+export const selectTotalResults = state => state.news.totalResults;
 export default newsSlice.reducer;
