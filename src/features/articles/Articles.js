@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './Articles.module.css'
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+
 import {
   selectArticles,
   fetchArticles,
@@ -23,16 +27,21 @@ export function Articles() {
   return (
     <div>
       <TextField placeholder="Search" name="searchQuery" onChange={(e) => setSearchQuery(e.target.value)} />
-      <Button variant="contained" color="primary"  disabled={!searchQuery} onClick={() => {
+      <Button variant="contained" color="primary" disabled={!searchQuery} onClick={() => {
         if (searchQuery) {
           dispatch(fetchArticles(searchQuery, page))
-        }else {
+        } else {
           alert("please enter a search query")
         }
       }}>Submit</Button>
       <ul>
         {articles.map(article => (
-          <Card key={article.title}><a href={article.url} rel="noopener noreferrer" target="_blank">{article.title}</a></Card>
+          <Card>
+              <CardContent key={article.title}><a href={article.url} rel="noopener noreferrer" target="_blank">{article.title}</a></CardContent>
+              <Typography>
+                
+              </Typography>
+          </Card>
         ))}
       </ul>
       {articles.length > 0 ? (
@@ -42,11 +51,11 @@ export function Articles() {
             dispatch(setPage(Math.max(1, page - 1)));
             dispatch(fetchArticles(searchQuery, page));
           }}>Previous</Button>
-          <Button m={3} variant="contained" color="primary" disabled={page ===  Math.ceil(totalResults/PAGE_SIZE)||!searchQuery}onClick={() => {
-            if(searchQuery){
-            dispatch(setPage(page + 1))
-            dispatch(fetchArticles(searchQuery, page))
-            } else{
+          <Button m={3} variant="contained" color="primary" disabled={page === Math.ceil(totalResults / PAGE_SIZE) || !searchQuery} onClick={() => {
+            if (searchQuery) {
+              dispatch(setPage(page + 1))
+              dispatch(fetchArticles(searchQuery, page))
+            } else {
               alert("Please enter a search query")
             }
           }}>Next</Button>
