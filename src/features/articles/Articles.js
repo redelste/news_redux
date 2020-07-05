@@ -38,9 +38,7 @@ export function Articles() {
         {articles.map(article => (
           <Card>
               <CardContent key={article.title}><a href={article.url} rel="noopener noreferrer" target="_blank">{article.title}</a></CardContent>
-              <Typography>
-                
-              </Typography>
+
           </Card>
         ))}
       </ul>
