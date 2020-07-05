@@ -18,7 +18,7 @@ export function Articles() {
   return (
     <div>
       <TextField placeholder="Search" name="searchQuery" onChange={(e) => setSearchQuery(e.target.value)} />
-      <Button variant="contained" color="primary" onClick={() => {
+      <Button variant="contained" color="primary"  disabled={!searchQuery} onClick={() => {
         if (searchQuery) {
           dispatch(fetchArticles(searchQuery, page))
         }else {
@@ -33,11 +33,11 @@ export function Articles() {
       {articles.length > 0 ? (
         <div>
           <p>Page: <strong>{page}</strong></p>
-          <Button variant="contained" color="primary" disabled={page === 1} onClick={() => {
+          <Button variant="contained" color="primary" disabled={page === 1 || !searchQuery} onClick={() => {
             dispatch(setPage(Math.max(1, page - 1)));
             dispatch(fetchArticles(searchQuery, page));
           }}>Previous</Button>
-          <Button  variant="contained" color="primary" onClick={() => {
+          <Button  variant="contained" color="primary" disabled={!searchQuery}onClick={() => {
             if(searchQuery){
             dispatch(setPage(page + 1))
             dispatch(fetchArticles(searchQuery, page))
